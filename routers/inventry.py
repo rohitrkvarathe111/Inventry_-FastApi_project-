@@ -105,7 +105,7 @@ async def get_all_item(session_id: str = Header(...), db: Session = Depends(get_
         all_items = db.query(Inventry).filter(
             Inventry.user_id == user_id,
             Inventry.is_deleted == False
-        ).order_by(Inventry.id.asc()).offset(start).limit(length).all()
+        ).order_by(Inventry.id.desc()).offset(start).limit(length).all()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database query error: {str(e)}")
 

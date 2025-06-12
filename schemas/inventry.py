@@ -39,6 +39,7 @@ class AllItemResponse(BaseModel):
     id: int
     item_name: str
     item_remaining_quantity: int
+    item_unit: str
     item_exp_date: str
 
     @validator("item_exp_date", pre=True)
