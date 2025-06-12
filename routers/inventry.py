@@ -101,11 +101,11 @@ async def get_all_item(session_id: str = Header(...), db: Session = Depends(get_
         raise HTTPException(status_code=400, detail="User ID not found in session data")
 
     try:
-        offset = (page - 1) * length
+        start = (page - 1) * length
         all_items = db.query(Inventry).filter(
             Inventry.user_id == user_id,
             Inventry.is_deleted == False
-        ).offset(offset).limit(length).all()
+        ).order_by(Inventry.id.asc()).offset(start).limit(length).all()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Database query error: {str(e)}")
 
