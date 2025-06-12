@@ -18,4 +18,18 @@ class InventryCreate(BaseModel):
     item_remaining_quantity: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
+
+# class ItemRequest(BaseModel):
+#     id: int
+
+
+class ItemResponse(BaseModel):
+    id: int
+    item_name: str
+    item_unit: str
+    item_total_quantity: int
+
+    class Config:
+        from_attributes = True

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from sqlalchemy.orm import Session
-from schemas.inventry import InventryCreate
+from schemas.inventry import InventryCreate, ItemResponse
 from fastapi import APIRouter, Depends, HTTPException, Header
 from routers.user_router import get_db
 from models.inventry import Inventry
@@ -37,3 +37,22 @@ async def create_item(item: InventryCreate, session_id: str = Header(...), db: S
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
+@router.get("/get_item", response_model=ItemResponse)
+async def get_item(id: int , session_id: str = Header(...), db: Session = Depends(get_db)):
+    session = db.query(SessionToken).filter(SessionToken.token == session_id).first()
+
+    if not session or session.expires_at < datetime.utcnow():
+        raise HTTPException(status_code=401, detail="Invalid or expired session")
+    
+    decoded_json = base64.b64decode(session.encrypt_session_data.encode()).decode()
+    session_data = json.loads(decoded_json)
+    user_id = session_data.get("user_id")
+    # id = item_id.id
+    db_item = db.query(Inventry).filter(Inventry.id == id, Inventry.user_id == user_id).first()
+    if not db_item:
+        raise HTTPException(status_code=404, detail="Item not found for the given user.")
+
+    return db_item
+

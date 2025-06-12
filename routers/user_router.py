@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from schemas.user_auth import UserCreate, UserLogin
+from schemas.user_auth import UserCreate, UserLogin, UserLogout
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models.user_auth import User, SessionToken
@@ -98,6 +98,17 @@ def login(user_credentials: UserLogin, db: Session = Depends(get_db)):
     return login_data
 
 
+
+@router.post("/logout")
+def logout(session_token: str, db: Session = Depends(get_db)):
+    session = db.query(SessionToken).filter(SessionToken.token == session_token).first()
+
+    if not session or session.expires_at < datetime.utcnow():
+        raise HTTPException(status_code=401, detail="Invalid or expired session")
+    
+    db.delete(session)
+    db.commit()
+    return {"message": "Logged out successfully"}
 
 
 
