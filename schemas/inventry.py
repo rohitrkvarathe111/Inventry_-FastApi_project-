@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import Optional, List
 from datetime import datetime
 
@@ -39,7 +39,14 @@ class AllItemResponse(BaseModel):
     id: int
     item_name: str
     item_remaining_quantity: int
-    item_exp_date: datetime
+    item_exp_date: str
+
+    @validator("item_exp_date", pre=True)
+    def format_exp_date(cls, v):
+        if isinstance(v, datetime):
+            return v.strftime("%d-%m-%Y %H:%M:%S")
+        return v
+
 
     class Config:
         orm_mode = True
