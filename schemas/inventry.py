@@ -33,3 +33,13 @@ class ItemResponse(BaseModel):
 
     class Config:
         from_attributes = True
+        
+
+class AllItemResponse(BaseModel):
+    id: int
+    item_name: str
+    item_remaining_quantity: int
+    item_exp_date: datetime
+
+    class Config:
+        orm_mode = True

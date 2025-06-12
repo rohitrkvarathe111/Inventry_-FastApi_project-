@@ -16,14 +16,14 @@ app.include_router(inventry.router)
 def base_root():
     return {"message": "hello world"}
 
-@app.post("/api")
-def base_root():
-    return {"message": "hello world"}
+# @app.post("/api")
+# def base_root():
+#     return {"message": "hello world"}
 
-@app.put("/api")
-def base_root():
-    return {"message": "hello world"}
+# @app.put("/api")
+# def base_root():
+#     return {"message": "hello world"}
 
-@app.delete("/api")
-def base_root():
-    return {"message": "hello world"}
+# @app.delete("/api")
+# def base_root():
+#     return {"message": "hello world"}
