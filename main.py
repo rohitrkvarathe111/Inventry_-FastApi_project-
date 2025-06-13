@@ -1,12 +1,12 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
-from models import user_auth, inventry
+from models import user_auth, inventry, buyer
 from routers import inventry, user_router
 
 
 user_auth.Base.metadata.create_all(bind=engine)
-app = FastAPI()
+app = FastAPI(debug=True)
 
 
 app.include_router(user_router.router)

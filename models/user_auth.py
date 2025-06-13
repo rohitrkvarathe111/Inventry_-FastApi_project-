@@ -1,11 +1,8 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
 
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, Text, Float, BigInteger
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.orm import relationship
-from database import Base
 import datetime
 from datetime import timedelta
 

@@ -1,14 +1,15 @@
 from fastapi import APIRouter
-from schemas.user_auth import UserCreate, UserLogin, UserLogout
+from schemas.user_auth import UserCreate, UserLogin, UserLogout, AllUsers
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models.user_auth import User, SessionToken
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException, Header, Query
 from passlib.context import CryptContext
 import secrets
 import base64
 import json
 from datetime import datetime, timedelta
+from typing import List, Optional
 
 
 router = APIRouter(
@@ -124,3 +125,18 @@ def get_session_data(session_id: str = Header(...), db: Session = Depends(get_db
     session_data = json.loads(decoded_json)
 
     return session_data
+
+
+
+@router.get("/all_users", response_model=List[AllUsers], status_code=200)
+def all_users(db: Session = Depends(get_db),
+                    page: int = Query(1, ge=1),
+                    length: int = Query(10, gt=0)):
+
+    try:
+        start = (page - 1) * length
+        all_user = db.query(User).order_by(User.id.desc()).offset(start).limit(length).all()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database query error: {str(e)}")
+
+    return all_user

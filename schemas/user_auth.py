@@ -25,3 +25,17 @@ class UserLogin(BaseModel):
 
 class UserLogout(BaseModel):
     session_id: str
+
+
+class AllUsers(BaseModel):
+    id: int
+    username: str
+    email : EmailStr
+    first_name: str
+    middle_name: Optional[str] = None
+    last_name: Optional[str] = None
+    mobile_number: Optional[str] = None
+    is_active: bool
+
+    class Config:
+        orm_mode = True
